@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import Transaction from '@/models/Transaction';
+import Transaction from '../../../models/Transaction';
 
 // 1. POST: Save New Order / Transaction
 export async function POST(request) {

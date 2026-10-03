@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import Transaction from '@/models/Transaction';
+import Transaction from '../../../../models/Transaction';
 
 // 1. GET: Fetch Single Order by ID
 export async function GET(request, { params }) {
