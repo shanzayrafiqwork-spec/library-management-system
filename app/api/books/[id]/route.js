@@ -1,5 +1,5 @@
-import dbConnect from '../../../lib/dbConnect';
-import Member from '../../../models/Member';
+import dbConnect from '@/lib/dbConnect';
+import Member from '@/models/Member';
 
 import { NextResponse } from 'next/server';
 

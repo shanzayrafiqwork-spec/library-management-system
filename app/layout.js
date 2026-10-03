@@ -1,6 +1,8 @@
+
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 export const metadata = {
   title: "Rooh-e-Dastaan",
@@ -11,10 +13,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
 }
+
