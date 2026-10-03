@@ -1,53 +1,82 @@
-import dbConnect from '@/lib/dbConnect';
-import Member from '@/models/Member';
 
 import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/dbConnect';
+import Book from '@/models/Book';
 
-// 1. GET All Novels (With Writer Filter support)
+// 1. GET All Books (With Author Filter Support)
 export async function GET(req) {
   try {
     await dbConnect();
+
     const { searchParams } = new URL(req.url);
     const author = searchParams.get('author');
 
     let query = {};
+
     if (author && author !== 'All') {
       query.author = author;
     }
 
-    const novels = await Novel.find(query).sort({ createdAt: -1 });
-    return NextResponse.json({ success: true, data: novels }, { status: 200 });
+    const books = await Book.find(query).sort({ createdAt: -1 });
+
+    return NextResponse.json(
+      { success: true, data: books },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
 
-// 2. POST Add New Novel
+// 2. POST Add New Book
 export async function POST(req) {
   try {
     await dbConnect();
+
     const body = await req.json();
-    const novel = await Novel.create(body);
-    return NextResponse.json({ success: true, data: novel }, { status: 201 });
+    const book = await Book.create(body);
+
+    return NextResponse.json(
+      { success: true, data: book },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 }
+    );
   }
 }
 
-// 3. DELETE Novel
+// 3. DELETE Book
 export async function DELETE(req) {
   try {
     await dbConnect();
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json({ success: false, error: 'Novel ID required' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'Book ID required' },
+        { status: 400 }
+      );
     }
 
-    await Novel.findByIdAndDelete(id);
-    return NextResponse.json({ success: true, message: 'Novel deleted' }, { status: 200 });
+    await Book.findByIdAndDelete(id);
+
+    return NextResponse.json(
+      { success: true, message: 'Book deleted' },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
+
