@@ -1,5 +1,6 @@
-import dbConnect from '@/lib/dbConnect';
-import Novel from '@/models/Novel';
+import dbConnect from '../../../lib/dbConnect';
+import Member from '../../../models/Member';
+
 import { NextResponse } from 'next/server';
 
 // 1. GET All Novels (With Writer Filter support)
