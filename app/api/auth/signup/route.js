@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Member from '@/models/Member';
@@ -5,49 +6,88 @@ import Member from '@/models/Member';
 export async function POST(request) {
   try {
     await dbConnect();
-    const { fullName, email, password, phone } = await request.json();
 
-    // Basic Validation
+    const body = await request.json();
+
+    const {
+      fullName,
+      email,
+      password,
+      phone,
+    } = body;
+
+    // ===============================
+    // VALIDATION
+    // ===============================
+
     if (!fullName || !email || !password || !phone) {
       return NextResponse.json(
-        { success: false, message: 'Tamam fields fill karna zaroori hain.' },
+        {
+          success: false,
+          message: 'Full Name, Email, Password aur Phone required hain.',
+        },
         { status: 400 }
       );
     }
 
-    // Check if email already exists
-    const existingMember = await Member.findOne({ email: email.toLowerCase() });
+    // ===============================
+    // CHECK EXISTING MEMBER
+    // ===============================
+
+    const existingMember = await Member.findOne({
+      email: email.toLowerCase().trim(),
+    });
+
     if (existingMember) {
       return NextResponse.json(
-        { success: false, message: 'Yeh email pehle se registered hai.' },
-        { status: 400 }
+        {
+          success: false,
+          message: 'Ye email already registered hai. Please login karein.',
+        },
+        { status: 409 }
       );
     }
 
-    // Create New Member
+    // ===============================
+    // CREATE MEMBER
+    // ===============================
+
     const newMember = await Member.create({
-      fullName,
-      email: email.toLowerCase(),
-      password, // Practical app me bcrypt se hash kar sakte hain
-      phone,
+      fullName: fullName.trim(),
+      email: email.toLowerCase().trim(),
+      password,
+      phone: phone.trim(),
+      role: 'member',
     });
+
+    // ===============================
+    // SUCCESS
+    // ===============================
 
     return NextResponse.json(
       {
         success: true,
-        message: 'Account kamyabi se ban gaya hai!',
-        user: {
+        message: 'Signup successfully ho gaya!',
+        member: {
           id: newMember._id,
           fullName: newMember.fullName,
           email: newMember.email,
+          phone: newMember.phone,
+          role: newMember.role,
         },
       },
       { status: 201 }
     );
   } catch (error) {
+    console.error('SIGNUP ERROR:', error);
+
     return NextResponse.json(
-      { success: false, message: error.message || 'Server error aagaya hai.' },
+      {
+        success: false,
+        message: error.message || 'Signup nahi ho saka.',
+      },
       { status: 500 }
     );
   }
 }
+

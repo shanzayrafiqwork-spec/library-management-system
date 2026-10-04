@@ -1,6 +1,8 @@
+
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 function OriginalLogo() {
   return (
@@ -60,19 +62,8 @@ function OriginalLogo() {
           strokeLinecap="round"
         />
 
-        <circle
-          cx="30"
-          cy="28"
-          r="1.5"
-          fill="#FCD34D"
-        />
-
-        <circle
-          cx="72"
-          cy="26"
-          r="2"
-          fill="#FCD34D"
-        />
+        <circle cx="30" cy="28" r="1.5" fill="#FCD34D" />
+        <circle cx="72" cy="26" r="2" fill="#FCD34D" />
       </svg>
 
       <div className="flex flex-col text-left">
@@ -88,19 +79,48 @@ function OriginalLogo() {
   );
 }
 
-export default function Navbar({
-  cartCount = 0,
-  onOpenCart = () => {},
-}) {
+export default function Navbar() {
+  const [member, setMember] = useState(null);
+
+  useEffect(() => {
+    const loadMember = () => {
+      const savedMember = localStorage.getItem("member");
+
+      if (savedMember) {
+        try {
+          setMember(JSON.parse(savedMember));
+        } catch (error) {
+          console.error("Failed to load member:", error);
+          localStorage.removeItem("member");
+          setMember(null);
+        }
+      } else {
+        setMember(null);
+      }
+    };
+
+    loadMember();
+
+    window.addEventListener("storage", loadMember);
+
+    return () => {
+      window.removeEventListener("storage", loadMember);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("member");
+    setMember(null);
+    window.location.href = "/";
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80">
       <div className="w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-5">
         <div className="flex min-h-[72px] items-center justify-between gap-6">
 
-          {/* Logo */}
           <OriginalLogo />
 
-          {/* Navigation */}
           <div className="flex items-center gap-5 sm:gap-8 text-sm sm:text-base font-medium text-slate-300">
 
             <Link
@@ -124,20 +144,37 @@ export default function Navbar({
               Checkout
             </Link>
 
-            {/* Cart */}
-            <button
-              type="button"
-              onClick={onOpenCart}
-              className="relative flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-amber-400 transition-all hover:border-amber-400 hover:bg-slate-800"
-            >
-              <span>🛒 Cart</span>
-
-              {cartCount > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-xs font-bold text-slate-950">
-                  {cartCount}
+            {member ? (
+              <div className="flex items-center gap-3">
+                <span className="hidden sm:block text-amber-400 font-semibold">
+                  👤 {member.fullName}
                 </span>
-              )}
-            </button>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-red-500/20 hover:border-red-400"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-400"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="rounded-xl bg-amber-500 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
           </div>
         </div>
@@ -145,3 +182,5 @@ export default function Navbar({
     </nav>
   );
 }
+
+
