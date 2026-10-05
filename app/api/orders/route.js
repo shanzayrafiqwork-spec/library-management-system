@@ -1,16 +1,17 @@
-
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import dbConnect from '@/lib/dbConnect';
-import Transaction from '../../../models/Transaction';
-
-// ==========================================
-// POST: Create New Order
-// ==========================================
+import Transaction from '@/models/Transaction';
+import Member from '@/models/Member';
+import Book from '@/models/Book';
 
 export async function POST(request) {
   try {
     await dbConnect();
+
+    // Make sure Mongoose registers these models
+    Member;
+    Book;
 
     const body = await request.json();
 
@@ -23,11 +24,8 @@ export async function POST(request) {
       city,
       items,
       totalAmount,
+      paymentMethod,
     } = body;
-
-    // ==========================================
-    // VALIDATION
-    // ==========================================
 
     if (
       !memberId ||
@@ -38,7 +36,7 @@ export async function POST(request) {
       !city ||
       !items ||
       items.length === 0 ||
-      !totalAmount
+      totalAmount === undefined
     ) {
       return NextResponse.json(
         {
@@ -49,10 +47,6 @@ export async function POST(request) {
       );
     }
 
-    // ==========================================
-    // CHECK MEMBER ID
-    // ==========================================
-
     if (!mongoose.Types.ObjectId.isValid(memberId)) {
       return NextResponse.json(
         {
@@ -62,10 +56,6 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
-    // ==========================================
-    // CHECK BOOK IDs
-    // ==========================================
 
     for (const item of items) {
       if (!item.novelId) {
@@ -93,20 +83,19 @@ export async function POST(request) {
       }
     }
 
-    // ==========================================
-    // CONVERT ITEMS
-    // ==========================================
-
     const transactionItems = items.map((item) => ({
       book: item.novelId,
       title: item.title,
-      price: Number(item.price || 1200),
+      price: Number(item.price || 0),
       quantity: Number(item.quantity || 1),
     }));
 
-    // ==========================================
-    // SAVE ORDER
-    // ==========================================
+    const selectedPaymentMethod =
+      paymentMethod === 'wallet'
+        ? 'wallet'
+        : paymentMethod === 'bank'
+        ? 'bank'
+        : 'cod';
 
     const newOrder = await Transaction.create({
       member: memberId,
@@ -126,16 +115,12 @@ export async function POST(request) {
 
       grandTotal: Number(totalAmount),
 
-      paymentMethod: 'cod',
+      paymentMethod: selectedPaymentMethod,
 
       transactionId: '',
 
       status: 'Pending',
     });
-
-    // ==========================================
-    // SUCCESS
-    // ==========================================
 
     return NextResponse.json(
       {
@@ -161,21 +146,17 @@ export async function POST(request) {
   }
 }
 
-// ==========================================
-// GET: Orders
-// ==========================================
-
 export async function GET(request) {
   try {
     await dbConnect();
 
+    // Make sure Member and Book models are registered
+    Member;
+    Book;
+
     const { searchParams } = new URL(request.url);
 
     const memberId = searchParams.get('memberId');
-
-    // ==========================================
-    // MEMBER ORDERS
-    // ==========================================
 
     if (memberId) {
       if (!mongoose.Types.ObjectId.isValid(memberId)) {
@@ -192,6 +173,7 @@ export async function GET(request) {
         member: memberId,
       })
         .populate('member', 'fullName email phone')
+        .populate('items.book', 'title author price coverImage')
         .sort({ createdAt: -1 });
 
       return NextResponse.json(
@@ -204,12 +186,9 @@ export async function GET(request) {
       );
     }
 
-    // ==========================================
-    // ALL ORDERS
-    // ==========================================
-
     const orders = await Transaction.find({})
       .populate('member', 'fullName email phone')
+      .populate('items.book', 'title author price coverImage')
       .sort({ createdAt: -1 });
 
     return NextResponse.json(
@@ -233,4 +212,3 @@ export async function GET(request) {
     );
   }
 }
-

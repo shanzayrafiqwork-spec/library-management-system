@@ -12,7 +12,8 @@ export default function CartDrawer({
   if (!isOpen) return null;
 
   const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) =>
+      sum + Number(item.price || 0) * Number(item.quantity || 1),
     0
   );
 
@@ -60,10 +61,11 @@ export default function CartDrawer({
             <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-2">
               {cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="rounded-xl border border-slate-800 bg-slate-900 p-3"
                 >
                   <div className="flex gap-3">
+
                     {/* Book Image */}
                     <div className="flex h-20 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-950">
                       <img
@@ -84,37 +86,41 @@ export default function CartDrawer({
                       </p>
 
                       <p className="mt-1 text-sm font-bold text-amber-400">
-                        Rs. {item.price.toLocaleString()}
+                        Rs. {Number(item.price || 0).toLocaleString()}
                       </p>
 
                       {/* Quantity */}
                       <div className="mt-3 flex items-center gap-2">
+
+                        {/* MINUS */}
                         <button
                           type="button"
                           onClick={() =>
                             onUpdateQty(
-                              item.id,
-                              item.quantity - 1
+                              item._id,
+                              Number(item.quantity || 1) - 1
                             )
                           }
-                          className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-white transition hover:bg-slate-700"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-lg font-bold text-white transition hover:bg-slate-700"
                         >
                           −
                         </button>
 
-                        <span className="flex h-7 min-w-8 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 px-2 text-xs font-bold text-white">
-                          {item.quantity}
+                        {/* QUANTITY */}
+                        <span className="flex h-8 min-w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 px-2 text-sm font-bold text-white">
+                          {item.quantity || 1}
                         </span>
 
+                        {/* PLUS */}
                         <button
                           type="button"
                           onClick={() =>
                             onUpdateQty(
-                              item.id,
-                              item.quantity + 1
+                              item._id,
+                              Number(item.quantity || 1) + 1
                             )
                           }
-                          className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-white transition hover:bg-slate-700"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-lg font-bold text-white transition hover:bg-slate-700"
                         >
                           +
                         </button>
@@ -124,7 +130,7 @@ export default function CartDrawer({
                     {/* Remove */}
                     <button
                       type="button"
-                      onClick={() => onRemove(item.id)}
+                      onClick={() => onRemove(item._id)}
                       className="self-start rounded-lg px-2 py-1 text-xs font-semibold text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
                     >
                       Remove

@@ -59,23 +59,116 @@ input {
   background: #f59e0b;
 }
 
-/* Falling Animation */
-@keyframes fall {
+
+/* =========================================
+   FALLING BOOKS
+========================================= */
+
+.falling-books-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+.falling-book {
+  position: absolute;
+
+  top: -160px;
+
+  object-fit: cover;
+
+  border-radius: 5px;
+
+  opacity: 0.45;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(245, 158, 11, 0.25);
+
+  animation-name: fallingBooks;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  will-change: transform, top, opacity;
+}
+
+
+/* =========================================
+   BOOK FALL ANIMATION
+========================================= */
+
+@keyframes fallingBooks {
+
   0% {
-    transform: translateY(0) rotate(0deg);
+    top: -160px;
+
+    transform:
+      translateX(0)
+      rotate(var(--start-rotate));
+
     opacity: 0;
   }
 
-  20% {
-    opacity: 0.8;
+  10% {
+    opacity: 0.45;
   }
 
-  80% {
-    opacity: 0.8;
+  25% {
+    transform:
+      translateX(30px)
+      rotate(calc(var(--start-rotate) + 90deg));
+  }
+
+  50% {
+    transform:
+      translateX(-30px)
+      rotate(calc(var(--start-rotate) + 180deg));
+  }
+
+  75% {
+    transform:
+      translateX(25px)
+      rotate(calc(var(--start-rotate) + 270deg));
+  }
+
+  90% {
+    opacity: 0.35;
   }
 
   100% {
-    transform: translateY(105vh) rotate(360deg);
+    top: 110vh;
+
+    transform:
+      translateX(-20px)
+      rotate(calc(var(--start-rotate) + 360deg));
+
     opacity: 0;
   }
 }
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+  .falling-book {
+    opacity: 0.30;
+  }
+
+}
+
+
+/* =========================================
+   NO ANIMATION DISABLE
+========================================= */
+
+/* intentionally left enabled */

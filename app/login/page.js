@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -147,17 +146,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center p-4 relative">
+    <div className="relative min-h-screen overflow-hidden text-slate-100 flex flex-col justify-center items-center p-4">
+
+      {/* Falling Books are already loaded globally from layout */}
 
       {/* Back to Store */}
       <Link
         href="/"
-        className="absolute top-6 left-6 text-slate-400 hover:text-amber-400 text-sm font-medium flex items-center gap-2 transition"
+        className="absolute top-6 left-6 z-20 text-slate-400 hover:text-amber-400 text-sm font-medium flex items-center gap-2 transition"
       >
         ← Return to Store
       </Link>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md p-6 md:p-8 shadow-2xl my-8">
+      {/* Login Card */}
+      <div className="relative z-10 bg-slate-900/90 backdrop-blur-sm border border-slate-800 rounded-3xl w-full max-w-md p-6 md:p-8 shadow-2xl my-8">
 
         {/* Logo */}
         <div className="flex justify-center mb-6">
@@ -198,7 +200,7 @@ export default function LoginPage() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-slate-100 px-4 py-3 rounded-xl outline-none text-sm transition"
+              className="w-full bg-slate-950/90 border border-slate-800 focus:border-amber-500 text-slate-100 px-4 py-3 rounded-xl outline-none text-sm transition"
             />
           </div>
 
@@ -217,7 +219,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 text-slate-100 px-4 py-3 pr-12 rounded-xl outline-none text-sm transition"
+                className="w-full bg-slate-950/90 border border-slate-800 focus:border-amber-500 text-slate-100 px-4 py-3 pr-12 rounded-xl outline-none text-sm transition"
               />
 
               <button
@@ -265,4 +267,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

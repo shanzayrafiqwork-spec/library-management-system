@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -121,54 +120,62 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-3 sm:py-5">
+    <nav className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-md">
+      <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-8 sm:py-5 lg:px-10">
 
         {/* TOP NAVBAR */}
-        <div className="flex min-h-[64px] sm:min-h-[72px] items-center justify-between gap-4">
+        <div className="flex min-h-[64px] items-center justify-between gap-4 sm:min-h-[72px]">
 
           <OriginalLogo />
 
           {/* DESKTOP MENU */}
-          <div className="hidden md:flex items-center gap-5 lg:gap-8 text-sm lg:text-base font-medium text-slate-300">
+          <div className="hidden items-center gap-4 text-sm font-medium text-slate-300 md:flex lg:gap-7 lg:text-base">
 
             <Link
               href="/"
-              className="py-3 px-1 hover:text-amber-400 transition-colors"
+              className="px-1 py-3 transition-colors hover:text-amber-400"
             >
               Home
             </Link>
 
             <Link
               href="/books"
-              className="py-3 px-1 hover:text-amber-400 transition-colors"
+              className="px-1 py-3 transition-colors hover:text-amber-400"
             >
               Novels
             </Link>
 
             <Link
               href="/transaction"
-              className="py-3 px-1 hover:text-amber-400 transition-colors"
+              className="px-1 py-3 transition-colors hover:text-amber-400"
             >
               Checkout
             </Link>
 
             {member ? (
-              <div className="flex items-center gap-3">
-                <span className="text-amber-400 font-semibold max-w-[180px] truncate">
-                  👤 {member.fullName}
-                </span>
+              <div className="flex items-center gap-2">
 
+                {/* DASHBOARD */}
+                <Link
+                  href="/dashboard"
+                  className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-400"
+                >
+                  Dashboard
+                </Link>
+
+                {/* LOGOUT */}
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-red-500/20 hover:border-red-400"
+                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition hover:border-red-400 hover:bg-red-500/20"
                 >
                   Logout
                 </button>
+
               </div>
             ) : (
               <div className="flex items-center gap-2">
+
                 <Link
                   href="/login"
                   className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-amber-400 hover:text-amber-400"
@@ -182,6 +189,7 @@ export default function Navbar() {
                 >
                   Sign Up
                 </Link>
+
               </div>
             )}
           </div>
@@ -190,7 +198,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden w-11 h-11 rounded-xl border border-slate-700 bg-slate-900 flex items-center justify-center text-slate-200 hover:text-amber-400 hover:border-amber-400 transition"
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-700 bg-slate-900 text-slate-200 transition hover:border-amber-400 hover:text-amber-400 md:hidden"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
           >
@@ -204,13 +212,14 @@ export default function Navbar() {
 
         {/* MOBILE MENU */}
         {menuOpen && (
-          <div className="md:hidden mt-3 pb-2 border-t border-slate-800 pt-4">
+          <div className="mt-3 border-t border-slate-800 pb-2 pt-4 md:hidden">
+
             <div className="flex flex-col gap-2">
 
               <Link
                 href="/"
                 onClick={closeMenu}
-                className="w-full rounded-xl px-4 py-3 text-slate-200 hover:bg-slate-900 hover:text-amber-400 transition"
+                className="w-full rounded-xl px-4 py-3 text-slate-200 transition hover:bg-slate-900 hover:text-amber-400"
               >
                 Home
               </Link>
@@ -218,7 +227,7 @@ export default function Navbar() {
               <Link
                 href="/books"
                 onClick={closeMenu}
-                className="w-full rounded-xl px-4 py-3 text-slate-200 hover:bg-slate-900 hover:text-amber-400 transition"
+                className="w-full rounded-xl px-4 py-3 text-slate-200 transition hover:bg-slate-900 hover:text-amber-400"
               >
                 Novels
               </Link>
@@ -226,29 +235,27 @@ export default function Navbar() {
               <Link
                 href="/transaction"
                 onClick={closeMenu}
-                className="w-full rounded-xl px-4 py-3 text-slate-200 hover:bg-slate-900 hover:text-amber-400 transition"
+                className="w-full rounded-xl px-4 py-3 text-slate-200 transition hover:bg-slate-900 hover:text-amber-400"
               >
                 Checkout
               </Link>
 
               {member ? (
                 <>
-                  <div className="rounded-xl bg-slate-900 border border-slate-800 px-4 py-3 text-amber-400 font-semibold">
-                    👤 {member.fullName}
-                  </div>
-
+                  {/* DASHBOARD */}
                   <Link
                     href="/dashboard"
                     onClick={closeMenu}
-                    className="w-full rounded-xl px-4 py-3 text-slate-200 hover:bg-slate-900 hover:text-amber-400 transition"
+                    className="w-full rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 font-semibold text-amber-400 transition hover:bg-amber-500/10"
                   >
-                    Dashboard
+                    📊 Dashboard
                   </Link>
 
+                  {/* LOGOUT */}
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full text-left rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 font-semibold text-red-400 transition hover:bg-red-500/20"
+                    className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-left font-semibold text-red-400 transition hover:bg-red-500/20"
                   >
                     Logout
                   </button>
@@ -272,6 +279,7 @@ export default function Navbar() {
                   </Link>
                 </>
               )}
+
             </div>
           </div>
         )}
@@ -279,4 +287,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

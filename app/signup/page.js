@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -67,9 +66,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4 py-10">
+    <div className="relative min-h-screen overflow-hidden text-slate-100 flex items-center justify-center px-4 py-10">
 
-      <div className="w-full max-w-md">
+      {/* Falling Books are already loaded globally from layout */}
+
+      <div className="relative z-10 w-full max-w-md">
 
         {/* Header */}
         <div className="text-center mb-8">
@@ -83,7 +84,7 @@ export default function SignupPage() {
         </div>
 
         {/* Signup Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl">
+        <div className="bg-slate-900/90 backdrop-blur-sm border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl">
 
           <h2 className="text-2xl font-bold mb-2">
             Sign Up
@@ -122,7 +123,7 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="Enter your full name"
                 required
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
+                className="w-full bg-slate-950/90 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
               />
             </div>
 
@@ -139,7 +140,7 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="Enter your email"
                 required
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
+                className="w-full bg-slate-950/90 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
               />
             </div>
 
@@ -159,7 +160,7 @@ export default function SignupPage() {
                   placeholder="Create a password"
                   required
                   minLength={6}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 pr-12 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
+                  className="w-full bg-slate-950/90 border border-slate-700 rounded-xl px-4 py-3 pr-12 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
                 />
 
                 <button
@@ -191,7 +192,7 @@ export default function SignupPage() {
                 onChange={handleChange}
                 placeholder="03XXXXXXXXX"
                 required
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
+                className="w-full bg-slate-950/90 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 outline-none focus:border-amber-500 transition"
               />
             </div>
 
@@ -225,4 +226,3 @@ export default function SignupPage() {
     </div>
   );
 }
-
